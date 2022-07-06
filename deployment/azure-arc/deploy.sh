@@ -5,10 +5,12 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 LIGHTGREEN='\033[1;32m'
 
-printf "${LIGHTGREEN}Type the Azure region you wish to use (no spaces and all lowercase. i.e., 'westcentralus'):${NC}"
+# printf "${LIGHTGREEN}Type the Azure region you wish to use (no spaces and all lowercase. i.e., 'westcentralus'): ${NC}"
+echo -e "\n$(tput setaf 2)Type the Azure region you wish to use (no spaces and all lowercase. i.e., 'westcentralus'): $(tput setaf 7)"
 read location
 
-printf "${LIGHTGREEN}How many Rancher k3s cluster VMs do you want to create?${NC}"
+# printf "${LIGHTGREEN}How many Rancher k3s cluster VMs do you want to create? ${NC}"
+echo -e "\n$(tput setaf 2)How many Rancher k3s cluster VMs do you want to create? $(tput setaf 7)"
 read vmCount
 
 unique=$(echo $RANDOM | md5sum | head -c 8)
@@ -29,19 +31,20 @@ subscriptionId=$(echo $account | awk '{print $2;}')
 # Create resource group
 az group create \
     -n $resourceGroupName \
-    -l $location
+    -l $location \
+    -o none
 
 # Create service principal
-spnName=="arc-k8s-$unique"
-az ad sp create-for-rbac -n $spnName --role "Contributor" --scopes /subscriptions/$subscriptionId
-az ad sp create-for-rbac -n $spnName --role "Security admin" --scopes /subscriptions/$subscriptionId
+spnName="arc-k8s-$unique"
+az ad sp create-for-rbac -n $spnName --role "Contributor" --scopes /subscriptions/$subscriptionId -o none
+az ad sp create-for-rbac -n $spnName --role "Security admin" --scopes /subscriptions/$subscriptionId -o none
 spn=$(az ad sp create-for-rbac -n $spnName --role "Security reader" --scopes /subscriptions/$subscriptionId -o tsv --query "[appId, password]")
 spnClientId=$(echo $spn | awk '{print $1;}')
 spnPassword=$(echo $spn | awk '{print $2;}')
 
 # Deploy resources
 deploymentName="arc-k8s-$unique"
-echo -e "Creating deployment $deploymentName"
+echo -e "\n$(tput setaf 2)Creating deployment $deploymentName$(tput setaf 7)"
 
 output=$(az deployment group create \
     -g $resourceGroupName \
@@ -177,6 +180,6 @@ EOF
     fi
 done
 
-printf "${LIGHTGREEN}Deployment finished successfully.\n"
-printf "${GREEN}Resource Group name: $resourceGroupName\n\n"
+echo -e "\n$(tput setaf 3)Deployment finished successfully$(tput setaf 7)"
+echo -e "\n$(tput setaf 3)Resource Group name: $resourceGroupName\n\n$(tput setaf 7)"
 exit 0
