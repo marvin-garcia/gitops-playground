@@ -131,16 +131,19 @@ EOF
         exit 1
     fi
 
+    echo -e "\n$(tput setaf 2)Starting GitOps configuration for cluster '$vmName'$(tput setaf 7)"
+
     az k8s-configuration flux create \
-        -g $resourceGroupName \
-        -c $vmName \
-        -n sources \
-        -t connectedClusters \
-        --namespace cluster-config \
-        --scope cluster \
-        -u $repoUrl \
-        --branch $repoBranch \
-        --kustomization name=infra path=./infrastructure/sources prune=true
+      -g $resourceGroupName \
+      -c $vmName \
+      -n sources \
+      -t connectedClusters \
+      --namespace cluster-config \
+      --scope cluster \
+      -u $repoUrl \
+      --branch $repoBranch \
+      --kustomization name=infra path=./infrastructure/sources prune=true \
+      -o none
 
     if [[ $? -gt 0 ]]
     then
@@ -148,15 +151,16 @@ EOF
     fi
 
     az k8s-configuration flux create \
-        -g $resourceGroupName \
-        -c $vmName \
-        -n cluster-config \
-        -t connectedClusters \
-        -u $repoUrl \
-        --branch $repoBranch \
-        --kustomization name=infra path=./infrastructure/$vmName prune=true \
-        --namespace cluster-config \
-        --scope cluster
+      -g $resourceGroupName \
+      -c $vmName \
+      -n cluster-config \
+      -t connectedClusters \
+      -u $repoUrl \
+      --branch $repoBranch \
+      --kustomization name=infra path=./infrastructure/$vmName prune=true \
+      --namespace cluster-config \
+      --scope cluster \
+      -o none
 
     if [[ $? -gt 0 ]]
     then
@@ -164,15 +168,16 @@ EOF
     fi
 
     az k8s-configuration flux create \
-        -g $resourceGroupName \
-        -c $vmName \
-        -n apps-config \
-        -t connectedClusters \
-        -u $repoUrl \
-        --branch $repoBranch \
-        --kustomization name=apps path=./apps prune=true \
-        --namespace cluster-config \
-        --scope cluster
+      -g $resourceGroupName \
+      -c $vmName \
+      -n apps-config \
+      -t connectedClusters \
+      -u $repoUrl \
+      --branch $repoBranch \
+      --kustomization name=apps path=./apps prune=true \
+      --namespace cluster-config \
+      --scope cluster \
+      -o none
 
     if [[ $? -gt 0 ]]
     then
@@ -181,5 +186,5 @@ EOF
 done
 
 echo -e "\n$(tput setaf 3)Deployment finished successfully$(tput setaf 7)"
-echo -e "\n$(tput setaf 3)Resource Group name: $resourceGroupName\n\n$(tput setaf 7)"
+echo -e "$(tput setaf 3)Resource Group name: $resourceGroupName$(tput setaf 7)"
 exit 0
