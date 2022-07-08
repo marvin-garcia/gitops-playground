@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: carapi
-      version: ">=1.0.0"
+      version: "1.0.0"
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
