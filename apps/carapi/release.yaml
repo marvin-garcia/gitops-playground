@@ -8,7 +8,8 @@ spec:
   releaseName: carapi
   chart:
     spec:
-      chart: carapi
+      # chart: carapi
+      chart: ""
       version: "1.0.0"
       reconcileStrategy: ChartVersion
       sourceRef:
