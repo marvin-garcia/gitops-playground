@@ -4,4 +4,4 @@ resources:
   - bitnami.yaml
   - ingress-nginx.yaml
   - voteapp.yaml
-  # - carapi.yaml
+  - carapi.yaml
