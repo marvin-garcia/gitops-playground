@@ -1,0 +1,40 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: edgeapp
+  namespace: cluster-config
+spec:
+  targetNamespace: edgeapp
+  releaseName: edgeapp
+  chart:
+    spec:
+      chart: edgeapp
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: edgeapp
+        namespace: cluster-config
+      version: ">=1.0.1"
+  interval: 5m
+  install:
+    remediation:
+      retries: 3
+  values:
+    image:
+      repository: magaracr.azurecr.io/edge-app
+      tag: "1"
+    envFrom:
+    - configMapRef:
+        name: edgeapp-configmap
+    - secretRef:
+        name: edgeapp-secrets
+    ingress:
+      enabled: true
+      className: nginx
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+        nginx.ingress.kubernetes.io/use-regex: "false"
+      hosts:
+        - paths:
+            - path: /app
+              pathType: Prefix
