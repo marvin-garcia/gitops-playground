@@ -4,6 +4,13 @@ metadata:
   name: ingress-nginx
   namespace: cluster-config
 spec:
+  chart:
+    spec:
+      chart: ingress-nginx
+      sourceRef:
+        kind: HelmRepository
+        name: ingress-nginx
+        namespace: cluster-config
   values:
     controller:
       service:
