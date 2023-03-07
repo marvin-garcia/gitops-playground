@@ -1,18 +1,18 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: edgeapp
+  name: edge-app
   namespace: cluster-config
 spec:
-  targetNamespace: edgeapp
-  releaseName: edgeapp
+  targetNamespace: edge-app
+  releaseName: edge-app
   chart:
     spec:
-      chart: edgeapp
+      chart: edge-app
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
-        name: edgeapp
+        name: edge-app
         namespace: cluster-config
       version: ">=1.0.1"
   interval: 5m
@@ -25,9 +25,9 @@ spec:
       tag: "1"
     envFrom:
     - configMapRef:
-        name: edgeapp-configmap
+        name: edge-app-configmap
     - secretRef:
-        name: edgeapp-secrets
+        name: edge-app-secrets
     ingress:
       enabled: true
       className: nginx
@@ -36,5 +36,5 @@ spec:
         nginx.ingress.kubernetes.io/use-regex: "false"
       hosts:
         - paths:
-            - path: /app
+            - path: /
               pathType: Prefix
