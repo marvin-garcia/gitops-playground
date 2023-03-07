@@ -75,6 +75,7 @@ do
     vmName=$(echo $vm | jq -r ".vmName")
     ipAddress=$(echo $vm | jq -r ".privateIpAddress")
 
+    ## Cluster's infrastructure
     rm -rf "./infrastructure/$vmName"
 
     echo -e "\n$(tput setaf 2)Creating cluster infrastructure folder for '$vmName'\n$(tput setaf 7)"
@@ -117,10 +118,71 @@ spec:
         - '$ipAddress'
 EOF
 
-    echo -e "\n$(tput setaf 2)Pushing infrastructure files to repo for '$vmName'\n$(tput setaf 7)"
-
     git add "./infrastructure/$vmName"
     git commit -m "Added infrastructure files for '$vmName'"
+
+    ## Cluster's settings
+    rm -rf "./settings/$vmName"
+
+    echo -e "\n$(tput setaf 2)Creating cluster settings folder for '$vmName'\n$(tput setaf 7)"
+
+    mkdir -p "./settings/$vmName"
+    
+    echo -e "\n$(tput setaf 2)Writing cluster's kustomization file for '$vmName'\n$(tput setaf 7)"
+    
+    ## Write cluster's custom settings release
+    cat << EOF > "./settings/$vmName/kustomization.yaml"
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../app-settings
+patchesStrategicMerge:
+  - values.yaml
+EOF
+
+    echo -e "\n$(tput setaf 2)Writing cluster's values file for '$vmName'\n$(tput setaf 7)"
+    
+    TEMPERATURE=$(echo $[ $RANDOM % 30 ])
+    PRESSURE=$(echo $[ $RANDOM % 100 ])
+    VELOCITY=$(echo $[ $RANDOM % 50 ])
+    USERNAME="arcuser-$[ $RANDOM % 10 ]"
+    PASSWORD=$(echo $RANDOM | md5sum | head -c 20)
+    TOKEN=$(echo $PASSWORD | base64 -i)
+
+    cat << EOF > "./settings/$vmName/values.yaml"
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: edge-app-settings
+  namespace: cluster-config
+spec:
+  chart:
+    spec:
+      chart: edge-app
+      sourceRef:
+        kind: HelmRepository
+        name: edge-app
+        namespace: cluster-config
+  values:
+    configMap:
+      name: edge-app-configmap
+      data:
+        TEMPERATURE: $TEMPERATURE
+        PRESSURE: $PRESSURE
+        VELOCITY: $VELOCITY
+    secret:
+      name: edge-app-secret
+      stringData:
+        USERNAME: $USERNAME
+        PASSWORD: $PASSWORD
+        TOKEN: $TOKEN
+EOF
+
+    echo -e "\n$(tput setaf 2)Pushing settings files to repo for '$vmName'\n$(tput setaf 7)"
+
+    git add "./settings/$vmName"
+    git commit -m "Added settings files for '$vmName'"
+    
     git push
 
     if [[ $? -gt 0 ]]
@@ -172,8 +234,8 @@ EOF
       -t connectedClusters \
       -u $repoUrl \
       --branch $repoBranch \
-      --kustomization name=redis path=./infrastructure/redis prune=true  \
-      --kustomization name=apps path=./apps prune=true dependsOn=["redis"] sync_interval=3m retry_interval=3m timeout=3m \
+      --kustomization name=app-settings path=./settings/$vmName prune=true  \
+      --kustomization name=apps path=./apps prune=true dependsOn=["app-settings"] sync_interval=3m retry_interval=3m timeout=3m \
       --namespace cluster-config \
       --scope cluster \
       --interval 3m \

@@ -1,8 +1,8 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
-  name: ingress-nginx
+  name: edge-app
   namespace: cluster-config
 spec:
-  interval: 30m
+  interval: 5m
   url: https://marvin-garcia.github.io/gitops-playground/
