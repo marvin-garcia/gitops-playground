@@ -221,7 +221,7 @@ EOF
       -t connectedClusters \
       -u $repoUrl \
       --branch $repoBranch \
-      --kustomization name=app-settings path=./EdgeApp/app-settings/$vmName prune=true  \
+      --kustomization name=app-settings path=./EdgeApp/app-settings/$vmName prune=true sync_interval=3m retry_interval=3m timeout=3m \
       --kustomization name=apps path=./apps prune=true dependsOn=["app-settings"] sync_interval=3m retry_interval=3m timeout=3m \
       --namespace cluster-config \
       --scope cluster \
