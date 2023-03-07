@@ -5,4 +5,4 @@ metadata:
   namespace: cluster-config
 spec:
   interval: 30m
-  url: https://marvin-garcia.github.io/gitops-playground/
+  url: https://marvin-garcia.github.io/gitops-playground/helm-charts/
