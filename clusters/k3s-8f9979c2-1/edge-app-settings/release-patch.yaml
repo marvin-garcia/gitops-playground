@@ -7,7 +7,6 @@ spec:
   chart:
     spec:
       chart: edge-app-settings
-      version: 0.2.0
       sourceRef:
         kind: HelmRepository
         name: edge-app-settings
