@@ -8,7 +8,7 @@ LIGHTGREEN='\033[1;32m'
 echo -e "\n$(tput setaf 2)Type the Azure region you wish to use (no spaces and all lowercase. i.e., 'westcentralus'): $(tput setaf 7)"
 read location
 
-echo -e "\n$(tput setaf 2)How many Rancher k3s cluster VMs do you want to create? $(tput setaf 7)"
+echo -e "\n$(tput setaf 2)How many k3s cluster VMs do you want to create? $(tput setaf 7)"
 read vmCount
 
 unique=$(echo $RANDOM | md5sum | head -c 8)
@@ -35,8 +35,11 @@ az group create \
 
 # Create service principal
 spnName="arc-k8s-$unique"
+echo "Creating service principal '$spnName'"
+
 az ad sp create-for-rbac -n $spnName --role "Contributor" --scopes /subscriptions/$subscriptionId -o none
 az ad sp create-for-rbac -n $spnName --role "Security admin" --scopes /subscriptions/$subscriptionId -o none
+sleep 5
 spn=$(az ad sp create-for-rbac -n $spnName --role "Security reader" --scopes /subscriptions/$subscriptionId -o tsv --query "[appId, password]")
 spnClientId=$(echo $spn | awk '{print $1;}')
 spnPassword=$(echo $spn | awk '{print $2;}')
@@ -91,25 +94,17 @@ kind: Kustomization
 resources:
   - ../ingress-nginx
 patchesStrategicMerge:
-  - values.yaml
+  - release-patch.yaml
 EOF
 
     echo -e "\n$(tput setaf 2)Writing cluster's values file for '$vmName'\n$(tput setaf 7)"
     
-    cat << EOF > "./infrastructure/$vmName/values.yaml"
+    cat << EOF > "./infrastructure/$vmName/release-patch.yaml"
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: ingress-nginx
-  namespace: cluster-config
 spec:
-  chart:
-    spec:
-      chart: ingress-nginx
-      sourceRef:
-        kind: HelmRepository
-        name: ingress-nginx
-        namespace: cluster-config
   values:
     controller:
       service:
@@ -122,22 +117,22 @@ EOF
     git commit -m "Added infrastructure files for '$vmName'"
 
     ## Cluster's settings
-    rm -rf "./settings/$vmName"
+    rm -rf "./EdgeApp/app-settings/$vmName"
 
     echo -e "\n$(tput setaf 2)Creating cluster settings folder for '$vmName'\n$(tput setaf 7)"
 
-    mkdir -p "./settings/$vmName"
+    mkdir -p "./EdgeApp/app-settings/$vmName"
     
     echo -e "\n$(tput setaf 2)Writing cluster's kustomization file for '$vmName'\n$(tput setaf 7)"
     
     ## Write cluster's custom settings release
-    cat << EOF > "./settings/$vmName/kustomization.yaml"
+    cat << EOF > "./EdgeApp/app-settings/$vmName/kustomization.yaml"
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../app-settings
+  - ../
 patchesStrategicMerge:
-  - values.yaml
+  - release-patch.yaml
 EOF
 
     echo -e "\n$(tput setaf 2)Writing cluster's values file for '$vmName'\n$(tput setaf 7)"
@@ -149,20 +144,12 @@ EOF
     PASSWORD=$(echo $RANDOM | md5sum | head -c 20)
     TOKEN=$(echo $PASSWORD | base64 -i)
 
-    cat << EOF > "./settings/$vmName/values.yaml"
+    cat << EOF > "./EdgeApp/app-settings/$vmName/release-patch.yaml"
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: edge-app-settings
-  namespace: cluster-config
 spec:
-  chart:
-    spec:
-      chart: edge-app
-      sourceRef:
-        kind: HelmRepository
-        name: edge-app
-        namespace: cluster-config
   values:
     configMap:
       name: edge-app-configmap
@@ -180,7 +167,7 @@ EOF
 
     echo -e "\n$(tput setaf 2)Pushing settings files to repo for '$vmName'\n$(tput setaf 7)"
 
-    git add "./settings/$vmName"
+    git add "./EdgeApp/app-settings/$vmName"
     git commit -m "Added settings files for '$vmName'"
     
     git push
@@ -234,7 +221,7 @@ EOF
       -t connectedClusters \
       -u $repoUrl \
       --branch $repoBranch \
-      --kustomization name=app-settings path=./settings/$vmName prune=true  \
+      --kustomization name=app-settings path=./EdgeApp/app-settings/$vmName prune=true  \
       --kustomization name=apps path=./apps prune=true dependsOn=["app-settings"] sync_interval=3m retry_interval=3m timeout=3m \
       --namespace cluster-config \
       --scope cluster \

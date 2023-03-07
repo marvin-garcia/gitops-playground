@@ -49,7 +49,7 @@ the image below illustrates the resources that are deployed and how they are con
 Probably the most important part of GitOps, is having a clear structure and separation of what will be deployed to the clusters and how they have dependencies on each other. The snippet below shows the repository folders that are relevant to the Flux configuration:
 
 ```textile
-aks-playground/
+gitops-playground/
 ├── apps
 │   ├── kustomization.yaml
 │   └── voteapp
@@ -189,14 +189,14 @@ Now that you have a high level understanding of the key concepts and the structu
 
 ## Getting Started
 
-1. You must fork the repo to your account so you can commit changes related to the clusters' ingress configuration. On your browser, go to `https://github.com/marvin-garcia/aks-playground`, click the `Fork` button on the top right corner and follow the instructions to add it to your GitHub's organization.
+1. You must fork the repo to your account so you can commit changes related to the clusters' ingress configuration. On your browser, go to `https://github.com/marvin-garcia/gitops-playground`, click the `Fork` button on the top right corner and follow the instructions to add it to your GitHub's organization.
 
 ![fork-repo](../../docs/github-fork.png)
 
 2. Open Azure Cloud Shell or a local Linux console (see the prerequisites section above for more information), clone the repository you just forked:
 
 ```bash
-git clone https://github.com/<your-github-org-name>/aks-playground.git
+git clone https://github.com/<your-github-org-name>/gitops-playground.git
 ```
 
 3. The deployment wizard will create new files and commit them to your repo. If you want to avoid hosting cluster configurations for infrastructure that you won't care about, consider using a new branch.
@@ -211,7 +211,7 @@ git push --set-upstream origin <your-new-branch-name>
 4. Run the Azure Arc deployment script and follow the wizard instructions:
 
 ```bash
-cd aks-playground
+cd gitops-playground
 ./deployment/azure-arc/deploy.sh
 ```
 

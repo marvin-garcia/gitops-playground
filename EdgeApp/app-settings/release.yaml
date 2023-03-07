@@ -1,0 +1,22 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: edge-app-settings
+  namespace: cluster-config
+spec:
+  targetNamespace: edge-app
+  releaseName: edge-app-settings
+  chart:
+    spec:
+      chart: edge-app-settings
+      sourceRef:
+        kind: HelmRepository
+        name: edge-app-settings
+        namespace: cluster-config
+  interval: 1h
+  install:
+    remediation:
+      retries: 3
+  # values:
+  #   configMap:
+  #   secret:

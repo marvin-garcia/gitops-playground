@@ -39,7 +39,7 @@ param logAnalyticsWorkspaceName string
 param githubAccount string = 'marvin-garcia'
 
 @description('Target GitHub repository')
-param githubRepo string = 'aks-playground'
+param githubRepo string = 'gitops-playground'
 
 @description('Target GitHub branch')
 param githubBranch string = 'main'

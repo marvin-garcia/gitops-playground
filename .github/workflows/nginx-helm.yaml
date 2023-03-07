@@ -12,9 +12,9 @@ on:
         required: false
 jobs:
   call-helm-package:
-    uses: marvin-garcia/aks-playground/.github/workflows/helm-package.yaml@main
+    uses: marvin-garcia/gitops-playground/.github/workflows/helm-package.yaml@main
     with:
-      repo_url: 'https://marvin-garcia.github.io/aks-playground/'
+      repo_url: 'https://marvin-garcia.github.io/gitops-playground/'
       package_path: 'infrastructure/ingress-nginx/'
       chart_path: 'infrastructure/ingress-nginx/chart/'
       gh_username: marvingarcia
