@@ -3,7 +3,7 @@ entries:
   edge-app:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-03-07T12:18:15.39647921-05:00"
+    created: "2023-03-07T16:27:59.061920175-05:00"
     description: A Helm chart for Kubernetes
     digest: a7bf96bd6b3ce281a0b4b9bd44e7a7803b84ed465547caede3bff44268a5739f
     name: edge-app
@@ -14,13 +14,13 @@ entries:
   edge-app-settings:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-03-07T12:18:15.396770894-05:00"
+    created: "2023-03-07T16:27:59.06202752-05:00"
     description: A Helm chart for Kubernetes
-    digest: be74aee0190130efbd4f8817f5b529ebd7b445926b031a7022744d7a496d4a7f
+    digest: 90622eb77ca3269dbb8345f5611cd327760642f8577684b2448a37df4eabd2ef
     name: edge-app-settings
     type: application
     urls:
-    - https://marvin-garcia.github.io/gitops-playground/edge-app-settings-0.1.0.tgz
+    - https://marvin-garcia.github.io/gitops-playground/edge-app-settings-0.2.0.tgz
     version: 0.1.0
   ingress-nginx:
   - annotations:
@@ -63,7 +63,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 1.1.1
-    created: "2023-03-07T12:18:15.399512844-05:00"
+    created: "2023-03-07T16:27:59.064328058-05:00"
     description: Ingress controller for Kubernetes using NGINX as a reverse proxy
       and load balancer
     digest: b0d3f2441f64f3472364a229a15518eb4dca95b82b47eabba2652462bd631d18
@@ -82,4 +82,4 @@ entries:
     urls:
     - https://marvin-garcia.github.io/gitops-playground/ingress-nginx-4.0.17.tgz
     version: 4.0.17
-generated: "2023-03-07T12:18:15.39350182-05:00"
+generated: "2023-03-07T16:27:59.061208327-05:00"
