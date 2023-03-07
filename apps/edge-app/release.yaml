@@ -21,8 +21,8 @@ spec:
       retries: 3
   values:
     image:
-      repository: magaracr.azurecr.io/edge-app
-      tag: "1"
+      repository: marvingarcia/edge-app
+      tag: "3"
     envFrom:
     - configMapRef:
         name: edge-app-configmap
