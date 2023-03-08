@@ -28,6 +28,15 @@ spec:
         name: edge-app-configmap
     - secretRef:
         name: edge-app-secret
+    # annotations:
+    #   reloader.stakater.com/auto: "true"
+    volumes:
+    - name: configmap-volume
+      configMap:
+        name: edge-app-configmap
+    - name: secret-volume
+      secret:
+        name: edge-app-secret
     ingress:
       enabled: true
       className: nginx
