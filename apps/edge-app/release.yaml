@@ -28,22 +28,8 @@ spec:
         name: edge-app-configmap
     - secretRef:
         name: edge-app-secret
-    # annotations:
-    #   reloader.stakater.com/auto: "true"
-    volumes:
-    - name: configmap-volume
-      configMap:
-        name: edge-app-configmap
-    - name: secret-volume
-      secret:
-        secretName: edge-app-secret
-    volumeMounts:
-    - name: configmap-volume
-      mountPath: /app/configmap-volume
-      readOnly: true
-    - name: secret-volume
-      mountPath: /app/secret-volume
-      readOnly: true
+    annotations:
+      reloader.stakater.com/auto: "true"
     ingress:
       enabled: true
       className: nginx
