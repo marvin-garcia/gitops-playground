@@ -36,7 +36,7 @@ spec:
         name: edge-app-configmap
     - name: secret-volume
       secret:
-        name: edge-app-secret
+        secretName: edge-app-secret
     volumeMounts:
     - name: configmap-volume
       mountPath: /app/configmap-volume
