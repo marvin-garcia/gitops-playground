@@ -14,7 +14,7 @@ spec:
         kind: HelmRepository
         name: edge-app
         namespace: cluster-config
-      version: ">=0.1.0"
+      version: ">=1.0.1"
   interval: 5m
   install:
     remediation:
