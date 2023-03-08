@@ -78,33 +78,41 @@ do
     vmName=$(echo $vm | jq -r ".vmName")
     ipAddress=$(echo $vm | jq -r ".privateIpAddress")
 
-    ## Cluster's infrastructure
-    rm -rf "./infrastructure/$vmName"
+    rm -rf "./clusters/$vmName"
 
+    ## Cluster's infrastructure
     echo -e "\n$(tput setaf 2)Creating cluster infrastructure folder for '$vmName'\n$(tput setaf 7)"
 
-    mkdir -p "./infrastructure/$vmName"
+    mkdir -p "./clusters/$vmName/infrastructure"
     
     echo -e "\n$(tput setaf 2)Writing cluster's kustomization file for '$vmName'\n$(tput setaf 7)"
     
     ## Write cluster's custom ingress release
-    cat << EOF > "./infrastructure/$vmName/kustomization.yaml"
+    cat << EOF > "./clusters/$vmName/infrastructure/kustomization.yaml"
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../ingress-nginx
+  - ../../../infrastructure/ingress-nginx
 patchesStrategicMerge:
   - release-patch.yaml
 EOF
 
     echo -e "\n$(tput setaf 2)Writing cluster's values file for '$vmName'\n$(tput setaf 7)"
     
-    cat << EOF > "./infrastructure/$vmName/release-patch.yaml"
+    cat << EOF > "./clusters/$vmName/infrastructure/release-patch.yaml"
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: ingress-nginx
+  namespace: cluster-config
 spec:
+  chart:
+    spec:
+      chart: ingress-nginx
+      sourceRef:
+        kind: HelmRepository
+        name: ingress-nginx
+        namespace: cluster-config
   values:
     controller:
       service:
@@ -113,24 +121,22 @@ spec:
         - '$ipAddress'
 EOF
 
-    git add "./infrastructure/$vmName"
+    git add "./clusters/$vmName/infrastructure"
     git commit -m "Added infrastructure files for '$vmName'"
 
     ## Cluster's settings
-    rm -rf "./EdgeApp/app-settings/$vmName"
-
     echo -e "\n$(tput setaf 2)Creating cluster settings folder for '$vmName'\n$(tput setaf 7)"
 
-    mkdir -p "./EdgeApp/app-settings/$vmName"
+    mkdir -p "./clusters/$vmName/edge-app-settings"
     
     echo -e "\n$(tput setaf 2)Writing cluster's kustomization file for '$vmName'\n$(tput setaf 7)"
     
     ## Write cluster's custom settings release
-    cat << EOF > "./EdgeApp/app-settings/$vmName/kustomization.yaml"
+    cat << EOF > "./clusters/$vmName/edge-app-settings/kustomization.yaml"
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../
+  - ../../../app-settings/edge-app
 patchesStrategicMerge:
   - release-patch.yaml
 EOF
@@ -144,19 +150,27 @@ EOF
     PASSWORD=$(echo $RANDOM | md5sum | head -c 20)
     TOKEN=$(echo $PASSWORD | base64 -i)
 
-    cat << EOF > "./EdgeApp/app-settings/$vmName/release-patch.yaml"
+    cat << EOF > "./clusters/$vmName/edge-app-settings/release-patch.yaml"
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: edge-app-settings
+  namespace: cluster-config
 spec:
+  chart:
+    spec:
+      chart: edge-app-settings
+      sourceRef:
+        kind: HelmRepository
+        name: edge-app-settings
+        namespace: cluster-config
   values:
     configMap:
       name: edge-app-configmap
       data:
-        TEMPERATURE: $TEMPERATURE
-        PRESSURE: $PRESSURE
-        VELOCITY: $VELOCITY
+        TEMPERATURE: \"$TEMPERATURE\"
+        PRESSURE: \"$PRESSURE\"
+        VELOCITY: \"$VELOCITY\"
     secret:
       name: edge-app-secret
       stringData:
@@ -167,7 +181,7 @@ EOF
 
     echo -e "\n$(tput setaf 2)Pushing settings files to repo for '$vmName'\n$(tput setaf 7)"
 
-    git add "./EdgeApp/app-settings/$vmName"
+    git add "./clusters/$vmName/edge-app-settings"
     git commit -m "Added settings files for '$vmName'"
     
     git push
@@ -204,7 +218,7 @@ EOF
       -t connectedClusters \
       -u $repoUrl \
       --branch $repoBranch \
-      --kustomization name=infra path=./infrastructure/$vmName prune=true \
+      --kustomization name=infra path=./clusters/$vmName/infrastructure prune=true \
       --namespace cluster-config \
       --scope cluster \
       -o none
@@ -221,7 +235,7 @@ EOF
       -t connectedClusters \
       -u $repoUrl \
       --branch $repoBranch \
-      --kustomization name=app-settings path=./EdgeApp/app-settings/$vmName prune=true sync_interval=3m retry_interval=3m timeout=3m \
+      --kustomization name=app-settings path=./clusters/$vmName/edge-app-settings prune=true sync_interval=3m retry_interval=3m timeout=3m \
       --kustomization name=apps path=./apps prune=true dependsOn=["app-settings"] sync_interval=3m retry_interval=3m timeout=3m \
       --namespace cluster-config \
       --scope cluster \
