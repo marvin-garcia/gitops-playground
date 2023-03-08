@@ -27,7 +27,7 @@ spec:
     - configMapRef:
         name: edge-app-configmap
     - secretRef:
-        name: edge-app-secrets
+        name: edge-app-secret
     ingress:
       enabled: true
       className: nginx
