@@ -72,6 +72,13 @@ then
     exit 1
 fi
 
+TEMPERATURE="20"
+PRESSURE="30"
+VELOCITY="40"
+USERNAME="arcuser"
+PASSWORD=$(echo $RANDOM | md5sum | head -c 20)
+TOKEN=$(echo $PASSWORD | base64 -i)
+
 for (( c=0; c<$vmCount; c++))
 do
     vm=$(echo $output | jq -r ".arcBox.value[$c]")
@@ -143,13 +150,6 @@ EOF
 
     echo -e "\n$(tput setaf 2)Writing cluster's values file for '$vmName'\n$(tput setaf 7)"
     
-    TEMPERATURE=$(echo $[ $RANDOM % 30 ])
-    PRESSURE=$(echo $[ $RANDOM % 100 ])
-    VELOCITY=$(echo $[ $RANDOM % 50 ])
-    USERNAME="arcuser-$[ $RANDOM % 10 ]"
-    PASSWORD=$(echo $RANDOM | md5sum | head -c 20)
-    TOKEN=$(echo $PASSWORD | base64 -i)
-
     cat << EOF > "./clusters/$vmName/edge-app-settings/release-patch.yaml"
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -168,15 +168,15 @@ spec:
     configMap:
       name: edge-app-configmap
       data:
-        TEMPERATURE: \"$TEMPERATURE\"
-        PRESSURE: \"$PRESSURE\"
-        VELOCITY: \"$VELOCITY\"
+        TEMPERATURE: "$TEMPERATURE"
+        PRESSURE: "$PRESSURE"
+        VELOCITY: "$VELOCITY"
     secret:
       name: edge-app-secret
       stringData:
-        USERNAME: $USERNAME
-        PASSWORD: $PASSWORD
-        TOKEN: $TOKEN
+        USERNAME: "$USERNAME"
+        PASSWORD: "$PASSWORD"
+        TOKEN: "$TOKEN"
 EOF
 
     echo -e "\n$(tput setaf 2)Pushing settings files to repo for '$vmName'\n$(tput setaf 7)"
@@ -218,6 +218,7 @@ EOF
       -t connectedClusters \
       -u $repoUrl \
       --branch $repoBranch \
+      --kustomization name=reloader path=./infrastructure/stakater-reloader prune=true \
       --kustomization name=infra path=./clusters/$vmName/infrastructure prune=true \
       --namespace cluster-config \
       --scope cluster \
