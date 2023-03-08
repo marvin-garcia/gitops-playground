@@ -8,7 +8,7 @@ spec:
   releaseName: stakater-reloader
   chart:
     spec:
-      chart: stakater/reloader
+      chart: reloader
       sourceRef:
         kind: HelmRepository
         name: stakater-reloader
