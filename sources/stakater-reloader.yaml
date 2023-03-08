@@ -1,7 +1,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
-  name: stakater-reloader
+  name: reloader
   namespace: cluster-config
 spec:
   interval: 30m
