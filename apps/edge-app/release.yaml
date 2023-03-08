@@ -22,7 +22,7 @@ spec:
   values:
     image:
       repository: marvingarcia/edge-app
-      tag: "3"
+      tag: "4"
     envFrom:
     - configMapRef:
         name: edge-app-configmap
