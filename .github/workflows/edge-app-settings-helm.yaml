@@ -2,7 +2,7 @@ name: Vote App Helm Package
 on:
   push:
     paths:
-    - 'EdgeApp/Helm/edge-app/**'
+    - 'EdgeApp/Helm/edge-app-settings/**'
     branches:
     - main
   workflow_dispatch:
@@ -13,7 +13,7 @@ on:
 env:
   REPO_URL: 'https://marvin-garcia.github.io/gitops-playground/helm-charts/'
   PACKAGE_PATH: 'EdgeApp/Helm/'
-  CHART_PATH: 'EdgeApp/Helm/edge-app/'
+  CHART_PATH: 'EdgeApp/Helm/edge-app-settings/'
   GH_USERNAME: 'marvingarcia'
   GH_EMAIL: 'noreply@github.com'
 jobs:
