@@ -3,7 +3,17 @@ entries:
   edge-app:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-03-08T10:20:07.371848613-05:00"
+    created: "2023-03-08T10:39:33.583359619-05:00"
+    description: A Helm chart for Kubernetes
+    digest: f1165fad1862b78a4660c7b100dc78179ea064e3cc31616a1d2ba3d0f9d7f4e8
+    name: edge-app
+    type: application
+    urls:
+    - https://marvin-garcia.github.io/gitops-playground/helm-charts/edge-app-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2023-03-08T10:39:33.582949537-05:00"
     description: A Helm chart for Kubernetes
     digest: 0096bfd763a83c6828095026b1e34a6effc0105731acdbad278891e68381b145
     name: edge-app
@@ -13,7 +23,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-03-08T10:20:07.371551439-05:00"
+    created: "2023-03-08T10:39:33.582572795-05:00"
     description: A Helm chart for Kubernetes
     digest: 393251165c48f412d0ba672a65b697941331a914c5e47fd89f470757a58224ed
     name: edge-app
@@ -23,7 +33,7 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-03-08T10:20:07.371267122-05:00"
+    created: "2023-03-08T10:39:33.581935697-05:00"
     description: A Helm chart for Kubernetes
     digest: a7bf96bd6b3ce281a0b4b9bd44e7a7803b84ed465547caede3bff44268a5739f
     name: edge-app
@@ -34,7 +44,7 @@ entries:
   edge-app-settings:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-03-08T10:20:07.371933763-05:00"
+    created: "2023-03-08T10:39:33.583551399-05:00"
     description: A Helm chart for Kubernetes
     digest: 90622eb77ca3269dbb8345f5611cd327760642f8577684b2448a37df4eabd2ef
     name: edge-app-settings
@@ -83,7 +93,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 1.1.1
-    created: "2023-03-08T10:20:07.375365145-05:00"
+    created: "2023-03-08T10:39:33.5875909-05:00"
     description: Ingress controller for Kubernetes using NGINX as a reverse proxy
       and load balancer
     digest: b0d3f2441f64f3472364a229a15518eb4dca95b82b47eabba2652462bd631d18
@@ -102,4 +112,4 @@ entries:
     urls:
     - https://marvin-garcia.github.io/gitops-playground/helm-charts/ingress-nginx-4.0.17.tgz
     version: 4.0.17
-generated: "2023-03-08T10:20:07.370789065-05:00"
+generated: "2023-03-08T10:39:33.581356383-05:00"

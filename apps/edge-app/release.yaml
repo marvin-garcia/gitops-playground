@@ -14,7 +14,7 @@ spec:
         kind: HelmRepository
         name: edge-app
         namespace: cluster-config
-      version: ">=1.0.1"
+      version: ">=1.0.2"
   interval: 5m
   install:
     remediation:
@@ -37,6 +37,13 @@ spec:
     - name: secret-volume
       secret:
         name: edge-app-secret
+    volumeMounts:
+    - name: configmap-volume
+      mountPath: /app/configmap-volume
+      readOnly: true
+    - name: secret-volume
+      mountPath: /app/secret-volume
+      readOnly: true
     ingress:
       enabled: true
       className: nginx
