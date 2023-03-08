@@ -1,0 +1,26 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: edge-app-settings
+  namespace: cluster-config
+spec:
+  chart:
+    spec:
+      chart: edge-app-settings
+      sourceRef:
+        kind: HelmRepository
+        name: edge-app-settings
+        namespace: cluster-config
+  values:
+    configMap:
+      name: edge-app-configmap
+      data:
+        TEMPERATURE: \"23\"
+        PRESSURE: \"46\"
+        VELOCITY: \"3\"
+    secret:
+      name: edge-app-secret
+      stringData:
+        USERNAME: arcuser-0
+        PASSWORD: 5c029d47f192df2ca975
+        TOKEN: NWMwMjlkNDdmMTkyZGYyY2E5NzUK
