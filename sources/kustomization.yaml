@@ -4,3 +4,4 @@ resources:
   - ingress-nginx.yaml
   - edge-app-settings.yaml
   - edge-app.yaml
+  - stakater-reloader.yaml
