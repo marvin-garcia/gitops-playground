@@ -15,7 +15,7 @@ spec:
     configMap:
       name: edge-app-configmap
       data:
-        TEMPERATURE: "20"
+        TEMPERATURE: "50"
         PRESSURE: "30"
         VELOCITY: "40"
     secret:
