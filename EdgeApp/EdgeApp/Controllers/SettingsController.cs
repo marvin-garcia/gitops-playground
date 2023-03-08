@@ -7,11 +7,13 @@ namespace EdgeApp.Controllers;
 
 public class SettingsController : Controller
 {
+    private readonly IConfiguration _configuration;
     private readonly ILogger<SettingsController> _logger;
 
-    public SettingsController(ILogger<SettingsController> logger)
+    public SettingsController(IConfiguration configuration, ILogger<SettingsController> logger)
     {
         _logger = logger;
+        _configuration = configuration;
     }
 
     public IActionResult Index()
@@ -19,18 +21,18 @@ public class SettingsController : Controller
         // Set settings
         Dictionary<string, string> settings = new Dictionary<string, string>()
         {
-            { "temperature", Environment.GetEnvironmentVariable("TEMPERATURE") },
-            { "pressure", Environment.GetEnvironmentVariable("PRESSURE") },
-            { "velocity", Environment.GetEnvironmentVariable("VELOCITY") },
+            { "temperature", _configuration["TEMPERATURE"] },
+            { "pressure", _configuration["PRESSURE"] },
+            { "velocity", _configuration["VELOCITY"] },
         };
         ViewData["Settings"] = settings;
         
         // Set secrets
         Dictionary<string, string> secrets = new Dictionary<string, string>()
         {
-            { "token", Environment.GetEnvironmentVariable("TOKEN") },
-            { "username", Environment.GetEnvironmentVariable("USERNAME") },
-            { "password", Environment.GetEnvironmentVariable("PASSWORD") },
+            { "token", _configuration["TOKEN"] },
+            { "username", _configuration["USERNAME"] },
+            { "password", _configuration["PASSWORD"] },
         };
         ViewData["Secrets"] = secrets;
 
