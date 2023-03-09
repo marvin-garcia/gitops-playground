@@ -197,7 +197,7 @@ Take a closer look at the files in the `clusters` folders. Notice how the custom
 
 Try adding a new application to the `apps` GitOps configuration and expose it through a new path in the Ingress Controller.
 
-> **TIP:** You can use the [Edge App release folder](apps/edge-app/) as a template to create yours. Make sure you use a different [Ingress redirection path](apps/edge-app/release.yaml#L40) to avoid conflicts.
+> **TIP:** You can use the [Edge App release folder](apps/edge-app/) as a template to create yours. Make sure you use a different [Ingress redirection path](apps/edge-app/release.yaml#L41) to avoid conflicts.
 
 ### Separation of Concerns
 
