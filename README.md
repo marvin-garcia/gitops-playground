@@ -201,4 +201,4 @@ Try adding a new application to the `apps` GitOps configuration and expose it th
 
 ### Separation of Concerns
 
-In a production environment, application code and state releases will most likely live in different repositories for security and separation of concerns purposes. You will also need a gated approval process to trigger new releases only when the time is right. You can use Pull Requests to submit changes to a repository branch and have them reviewed by multiple stakeholders before approving them.
+In a production environment, application code and state releases will most likely live in different repositories for security and separation of concern purposes. You will also need a gated approval process to trigger new releases only when the time is right. You can use Pull Requests to submit changes to a repository branch and have them reviewed by multiple stakeholders before approving them.
