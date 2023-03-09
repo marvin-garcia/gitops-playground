@@ -190,3 +190,15 @@ There is an [Azure Bastion](https://docs.microsoft.com/en-us/azure/bastion/basti
 In the Azure Portal, go to the GitOps section of any of the Azure Arc Kubernetes resources. Explore each configuration, their configuration objects and kustomizations. Compare them with the Azure CLI commands used in the last section of the [deployment script](deployment/azure-arc/deploy.sh#L196).
 
 Take a closer look at the files in the `clusters` folders. Notice how the custom cluster releases are patched with the generic ones located in [infrastructure/ingress-nginx](infrastructure/ingress-nginx) and [app-settings/edge-app](app-settings/edge-app).
+
+## Next Steps
+
+### Adding a New Application
+
+Try adding a new application to the `apps` GitOps configuration and expose it through a new path in the Ingress Controller.
+
+> **TIP:** You can use the [Edge App release folder](apps/edge-app/) as a template to create yours. Make sure you use a different [Ingress redirection path](apps/edge-app/release.yaml#L40) to avoid conflicts.
+
+### Separation of Concerns
+
+In a production environment, application code and state releases will most likely live in different repositories for security and separation of concerns purposes. You will also need a gated approval process to trigger new releases only when the time is right. You can use Pull Requests to submit changes to a repository branch and have them reviewed by multiple stakeholders before approving them.
