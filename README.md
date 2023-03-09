@@ -171,7 +171,7 @@ git push
 
 After a few minutes, the Home page in **_all your clusters_** will show `Build version 1.0.1`.
 
-8. Go back to the Azure Cloud Shell or your local Linux console and open the web app settings release file **for one of your clusters only_**. Change the settings values however you want. Commit and push your changes.
+8. Go back to the Azure Cloud Shell or your local Linux console and open the web app settings release file **_for one of your clusters only_**. Change the settings values however you want. Commit and push your changes.
 
 ```bash
 git add clusters/k3s-<uniqueId>-<clusterIndex>/edge-app-settings/release-patch.yaml
@@ -187,6 +187,6 @@ There is an [Azure Bastion](https://docs.microsoft.com/en-us/azure/bastion/basti
 
 > **TIP:** The Azure template sets the virtual machine's username to **arcuser**. Use your private SSH key located at `~/.ssh/id_rsa` to connect to the virtual machines through Azure Bastion.
 
-In the Azure Portal, go to the GitOps section of any of the Azure Arc Kubernetes resources. Explore the configurations, their configuration objects and kustomizations. Compare them with the Azure CLI commands used in the last section of the [deployment script](deployment/azure-arc/deploy.sh).
+In the Azure Portal, go to the GitOps section of any of the Azure Arc Kubernetes resources. Explore each configuration, their configuration objects and kustomizations. Compare them with the Azure CLI commands used in the last section of the [deployment script](deployment/azure-arc/deploy.sh#L196).
 
 Take a closer look at the files in the `clusters` folders. Notice how the custom cluster releases are patched with the generic ones located in [infrastructure/ingress-nginx](infrastructure/ingress-nginx) and [app-settings/edge-app](app-settings/edge-app).
